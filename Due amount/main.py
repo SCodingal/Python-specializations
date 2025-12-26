@@ -1,7 +1,11 @@
-def og_amount(x):
-  if x==0 or x==1:
-    return 1 
-  else:
-    return x-og_amount
+def total_calc(bill_amount, tip_perc):
+    total = bill_amount*(1 + 0.01*tip_perc)
+    total = round(total,2)
+    print(f"Please pay the total amount ${total}")
 
-  print("The due amount is:", og_amount(7000))
+total_calc(120,80)
+
+
+
+
+
