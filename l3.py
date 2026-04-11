@@ -1,98 +1,25 @@
-import pygame
-import random
+from tkinter import*
 
-pygame.init()
+root = Tk()
+root.title('Number Pad')
+root.geometry('250x300')
 
-SPRITE_COLOR_CHANGE_EVENT= pygame.USEREVENT + 1
-BACKGROUND_COLOR_CHANGE_EVENT= pygame.USEREVENT +2
+nums=[[9,8,7,], [6,5,4], [3,2,1], ['#', 0, '*']]
 
-BLUE = pygame.Color('blue')
-LIGHTBLUE= pygame.Color('lightblue')
-DARKBLUE= pygame.Color('darkblue')
-YELLOW= pygame.Color('yellow')
-MAGENTA= pygame.Color('magenta')
-ORANGE= pygame.Color('orange')
-WHITE= pygame.Color('white')
+for i in range(4):
 
-class Sprite(pygame.sprite.Sprite):
+    root.columnconfigure(i, weight=1, minsize=75)
+    root.rowconfigure(i, weight=1, minsize=50)
 
-   def __init__(self,color,height,width):
-
-       super().__init__()
-
-       self.image =pygame.Surface([width,height])
-       self.image.fill(color)
-
-       self.rect = self.image.get_rect()
-
-       self.velocity = [random.choice([-1,1]), random.choice([-1,1])]
-
-   def update(self):
-       
-       self.rect.move_ip(self.velocity)
-
-       boundry_hit=False
-
-       if self.rect.left <=0 or self.rect.right >= 500:
-           self.velocity[0]= -self.velocity[0]
-           boundry_hit=True
-
-       if self.rect.left <=0 or self.rect.right >= 400:
-           self.velocity[1]= -self.velocity[1]
-           boundry_hit=True
-
-       if boundry_hit:
-           pygame.event.post(pygame.event.Event(SPRITE_COLOR_CHANGE_EVENT))
-           pygame.event.post(pygame.event.Event(BACKGROUND_COLOR_CHANGE_EVENT))
-
-   def chnage_color(self):
-       self.image.fill(random.choice([YELLOW,MAGENTA,ORANGE,WHITE]))
-def chnage_background_color():
-    global bg_color
-    bg_color = random.choice([BLUE, LIGHTBLUE, DARKBLUE])
-
-all_sprites_list = pygame.sprite.Group()
-sp1 = Sprite(WHITE, 20,30)
-
-sp1.rect.x= random.randint(0, 480)
-sp1.rect.y= random.randint(0, 370)
-
-all_sprites_list.add(sp1)
-
-screen = pygame.display.set_mode((500,400))
-
-pygame.display.set_caption("Boundary Sprite")
-
-bg_color= BLUE
-screen.fill(bg_color)
-
-exit =False
-clock= pygame.time.Clock()
-
-while not exit:
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            exit = True
-        elif event.type == SPRITE_COLOR_CHANGE_EVENT:
-            sp1.chnage_color()
-        elif event.type == BACKGROUND_COLOR_CHANGE_EVENT:
-            chnage_background_color()
-
-    all_sprites_list.update()
-
-    screen.fill(bg_color)
-
-    all_sprites_list.draw(screen)
-
-    pygame.display.flip()
-    clock.tick(240)
-
-
-pygame.quit()
-
-
-
-       
-
+    for j in range(0,3):
+        frame=Frame(
+            master=root,
+            relief=SUNKEN,
+            borderwidth=1
+        )
+        frame.grid(row=i, column=j)
+        label = Label(master=frame, text= nums[i][j], bg='light blue')
+        label.pack(padx=3, pady=3)
+    
+root.mainloop()
 

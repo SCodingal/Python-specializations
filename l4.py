@@ -1,84 +1,39 @@
-import pygame
-import random
+from tkinter import*
 
-SCREEN_WIDTH, SCREEN_HEIGHT= 500, 400
-MOVMENT_SPEED= 5
-FONT_SIZE= 72
+root= Tk()
+root.title('Login App')
+root.geometry('400x400')
 
-pygame.init()
+frame = Frame(master=root, height=200, width=360, bg="blue")
 
-background_image=pygame.transform.scale(pygame.image.load("images.jpeg"),
-                                        (SCREEN_WIDTH, SCREEN_HEIGHT))
+lbl1= Label(frame, text="Full Name", bg="#3895D3", fg='white', width=12)
+lbl2= Label(frame, text="Email ID", bg="#3895D3", fg='white', width=12)
+lbl3= Label(frame, text="Enter Password", bg="#3895D3", fg='white', width=12)
 
-font = pygame.font.SysFont("Times New Roman", FONT_SIZE)
+name_entry=Entry(frame)
+email_entry=Entry(frame)
+pass_entry=Entry(frame, show="*")
 
-class Sprite(pygame.sprite.Sprite):
+def display():
+    name=name_entry.get()
+    greet= "Hey " +name
+    message="\nCongratulations for your new account!!"
+    textbox.insert(END, greet)
+    textbox.insert(END, message)
 
-    def __init__(self,color,height,width):
-        super().__init__()
-        self.image = pygame.Surface([width, height])
-        self.image.fill(
-            pygame.Color('dodgerblue'))
-        pygame.draw.rect(self.image, color, pygame.Rect(0,0,width,height))
-        self.rect=self.image.get_rect()
+textbox= Text(bg="#BEBEBE", fg="black")
 
-    def move(self, x_chnage, y_chnage):
-        self.rect.x=max(
-            min(self.rect.x + x_chnage, SCREEN_WIDTH - self.rect.width), 0)
-        
-        self.rect.y=max(
-            min(self.rect.y + y_chnage, SCREEN_WIDTH - self.rect.height), 0)
-        
+btn=Button(text= "Create Account", command=display, bg="red")
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Sprite Collasion")
-all_sprites = pygame.sprite.Group()
+frame.place(x=20,y=0)
+lbl1.place(x=20,y=20)
+name_entry.place(x=150,y=20)
+lbl2.place(x=20,y=80)
+email_entry.place(x=150,y=80)
+lbl3.place(x=20,y=140)
+pass_entry.place(x=150,y=140)
+btn.place(x=130,y=210)
+textbox.place(y=250)
 
-
-sprite1= Sprite(pygame.Color('black'), 20,30)
-sprite1.rect.x, sprite1.rect.y= random.randint(
-    0, SCREEN_WIDTH - sprite1.rect.width), random.randint(
-        0, SCREEN_HEIGHT - sprite1.rect.height)
-all_sprites.add(sprite1)
-
-sprite2= Sprite(pygame.Color('red'), 20,30)
-sprite2.rect.x, sprite2.rect.y= random.randint(
-    0, SCREEN_WIDTH - sprite2.rect.width), random.randint(
-        0, SCREEN_HEIGHT - sprite2.rect.height)
-all_sprites.add(sprite2)
-
-running, won= True, False
-clock =pygame.time.Clock()
-
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN
-                                         and event.key == pygame.K_x):
-            
-            running = False
-
-        if not won:
-            keys = pygame.key.get_pressed()
-            x_chnage= (keys[pygame.K_RIGHT] - keys [pygame.K_LEFT]) * MOVMENT_SPEED
-            y_chnage= (keys[pygame.K_DOWN] - keys [pygame.K_UP]) * MOVMENT_SPEED
-            sprite1.move(x_chnage, y_chnage)
-
-        if sprite1.rect.colliderect(sprite2.rect):
-            all_sprites.remove(sprite2)
-            won = True
-
-        screen.blit(background_image, (0,0))
-        all_sprites.draw(screen)
-
-        if won:
-            win_text= font.render("You win!", True, pygame.Color('black'))
-            screen.blit(win_text, ((SCREEN_WIDTH - win_text.get_width())//2,
-                        (SCREEN_HEIGHT - win_text.get_height()) //2 ))
-            
-
-        pygame.display.flip()
-
-pygame.quit()
-         
-
-        
+root.mainloop()
+   
